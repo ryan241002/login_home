@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SecurePet</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Galada&family=Headland+One&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="../styles/signin.css">
+
+
+</head>
+<body>
+    <div class="signin-form">
+        <div class="site-name">
+            Securepet
+        </div>
+        
+        <div class="signin-info">
+            <form id="signupForm" method="POST" action="login.php">
+                <input class="email" type="email" name="email" id="email" placeholder="Email">
+                <input class="password" type="password" name="password" id="password" placeholder="Password">
+            </form>
+        </div>
+
+        <div class="line">──────────── or ────────────</div>
+        <button class="signin-btn" type="submit" form="signupForm" id="submitBtn">Sign in</button>
+    </div>
+
+    <script>
+    document.getElementById("submitBtn").addEventListener("click", function(event) {
+        event.preventDefault();
+
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        if (!email || !password) {
+            alert("Please fill all fields.");
+            return;
+        }
+
+        // Create FormData object
+        const formData = new FormData(document.getElementById("signupForm"));
+
+        // Submit form using fetch
+        fetch('login.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text();
+        })
+        .then(data => {
+            try {
+                const jsonData = JSON.parse(data);
+                if (jsonData.status === 'success') {
+                    sessionStorage.setItem('userLoggedIn', 'true');
+                    window.location.href = jsonData.redirect;
+                } else {
+                    alert(jsonData.message);
+                }
+            } catch (e) {
+                alert('An error occurred while processing the response');
+                console.error(e);
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert('An error occurred while signing in. Check console for details.');
+        });
+    });
+    </script>
+
+</body>
+</html>

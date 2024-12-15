@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html> 
+<head> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>SecurePet</title>
+    <script src="scripts/auth_check.js"></script>
+    <script src="../scripts/logout.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Galada&family=Headland+One&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Inria+Serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Istok+Web:ital,wght@0,400;0,700;1,400;1,700&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+
+    <link rel="stylesheet" href="../styles/navbar.css">
+    <link rel="stylesheet" href="../styles/corner-circle.css">
+    <link rel="stylesheet" href="../styles/home.css">
+    
+
+</head>
+
+    <body>
+      <div class="corner-circle"></div>
+
+      <div class = "navbar"> 
+        <a href ="frontpage.html" class = "site-name">SecurePet</a>
+        <a href = "home.html" class = "home">Home</a>
+        <a href = "adopt.html" class = "adopt">Adopt</a>
+        <a href = "lost.html" class = "lost">Lost</a>
+        <a href = "veterinary.html" class = "vet-services">Veterinary Services</a>
+        <button onclick="logout()" class="logout-btn">Logout</button>
+      </div>
+
+     <div class = "home-grid">
+
+      <div class="user-profile">
+        <div class="welcome-profile"> 
+          <a id="welcomeMessage">Hi, Loading...</a>
+        </div>
+
+        <div class = "profile-pic">
+        </div>
+        
+      </div>
+
+      <div class = "pet-profile-grid">
+        <div class = "pet-info">
+          
+          <div class = "pet-info-top"> 
+            <div class = "pet-info-top-grid">
+
+              <div class = "pet-profile-pic"> 
+                 <img src="https://i.pinimg.com/736x/b7/ed/00/b7ed009538f05ab8ffeb95c1f6167dbf.jpg">
+              </div>
+             
+            
+              <div class = "pet-name">
+                <div class="animal"></div>
+                <br>
+                <div class="name-of-pet"></div>
+              </div>
+
+            </div>
+          </div>
+
+
+
+          <div class = "pet-info-middle"> 
+            <div class="address"> Adress : </div>
+          </div>
+
+          <div class = "pet-info-bottom">
+            <div class = "pet-info-bottom-grid">
+
+              <div class = "age">
+                <a>Age</a>
+                <div class="age-of-pet"></div>
+              </div>
+
+              <div class = "breed">
+                <a>Breed</a>
+                <div class="breed-of-pet"></div>
+              </div>
+
+              <div class = "sex">
+                <a>Sex</a>
+                <div class="sex-of-pet"></div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        
+        <div class = "lost-btn">
+          
+          <div class = "lost-btn-catchphrase">
+            <a>
+              Help is just around the corner
+            </a>
+          </div>
+
+          <div class = "lost-btn-paw">
+            
+            <div class ="paw-pic-div">
+              
+              <button class = "paw-button" onclick="openShareModal()">
+                <img class="paw-pic" src="../images/paw.png">
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class = "gallery-bio">
+
+        <div class = "gallery">
+          <a>gallery</a>
+        </div>
+
+        <div class = "bio">
+          <p id="bioText"></p>
+          <textarea id="bioEditor" style="display: none;"></textarea>
+          <button class="edit-bio-btn" onclick="toggleBioEdit()">Edit bio</button>
+        </div>
+        
+      </div>
+    </div>
+
+    <script>
+        function toggleBioEdit() {
+            const bioText = document.getElementById('bioText');
+            const bioEditor = document.getElementById('bioEditor');
+            const editButton = document.querySelector('.edit-bio-btn');
+
+            if (bioText.style.display !== 'none') {
+                // Switch to edit mode
+                bioEditor.value = bioText.innerText;
+                bioText.style.display = 'none';
+                bioEditor.style.display = 'block';
+                editButton.textContent = 'Save';
+                
+                // Enhanced textarea styling
+                bioEditor.style.width = '90%';
+                bioEditor.style.height = '100px';
+                bioEditor.style.padding = '8px';
+                bioEditor.style.marginBottom = '10px';
+                bioEditor.style.fontFamily = 'Inria Serif';
+                bioEditor.style.fontSize = '19px';
+                bioEditor.style.border = '1px solid rgba(200, 201, 227, 1)';
+                bioEditor.style.borderRadius = '5px';
+                bioEditor.style.resize = 'none';
+                
+                // Auto focus the editor
+                bioEditor.focus();
+            } else {
+                // Save changes and switch back to display mode
+                const newBio = bioEditor.value.trim();
+                if (newBio) {
+                    bioText.innerText = newBio;
+                    // Here you could add an API call to save the bio to the database
+                }
+                bioText.style.display = 'block';
+                bioEditor.style.display = 'none';
+                editButton.textContent = 'Edit bio';
+            }
+        }
+    </script>
+
+    <div id="shareModal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>Share Lost Pet Alert</h2>
+        <p>Where would you like to share this alert?</p>
+        
+        <div class="share-options">
+          <button class="share-btn facebook" onclick="shareToFacebook()">
+            <img src="../images/facebook-icon.png" alt="Facebook">
+            Share to Facebook
+          </button>
+          
+          <button class="share-btn instagram" onclick="shareToInstagram()">
+            <img src="../images/instagram-icon.png" alt="Instagram">
+            Share to Instagram
+          </button>
+          
+          <button class="share-btn share-both" onclick="shareToBoth()">
+            Share to Both
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+        function openShareModal() {
+            document.getElementById('shareModal').style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Prevent scrolling while modal is open
+        }
+
+        // Close modal when clicking the X or outside the modal
+        document.querySelector('.close-modal').onclick = function() {
+            document.getElementById('shareModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('shareModal')) {
+                document.getElementById('shareModal').style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        function shareToFacebook() {
+            FB.api(
+                `/${pageId}/photos`,
+                'POST',
+                {
+                    message: message,
+                    url: petImageUrl, // URL of the pet's image
+                    access_token: accessToken
+                },
+                function(response) {
+                    if (response && !response.error) {
+                        console.log('Posted successfully!');
+                    } else {
+                        console.error('Error posting to Facebook:', response.error);
+                    }
+                }
+            );
+        }
+
+        function shareToInstagram() {
+            // Instagram API implementation
+            // Note: Instagram requires a business account and Facebook API integration
+            console.log('Sharing to Instagram');
+        }
+
+        function shareToBoth() {
+            shareToFacebook();
+            shareToInstagram();
+        }
+    </script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      // Check if checkAuth is available
+      if (typeof window.checkAuth === 'undefined') {
+          console.error('Auth check function not loaded');
+          return;
+      }
+
+      console.log("Starting auth check...");
+      
+      // Now use checkAuth
+      window.checkAuth().then(() => {
+          console.log("Auth check passed, fetching pet data...");
+          
+          fetch('fetch_pet_data.php')
+              .then(response => {
+                  console.log("Raw fetch response:", response);
+                  return response.json();
+              })
+              .then(data => {
+                  console.log("Received pet data:", data);
+                  
+                  if (data.status === "success") {
+                      console.log("Successfully retrieved pet data:", data.data);
+                      
+                      // Update pet data
+                      document.querySelector(".name-of-pet").textContent = data.data.pet_name || 'No name';
+                      document.querySelector(".address").innerHTML = `<b>Address :</b> <br>${data.data.location || 'No address'}`;
+                      document.querySelector(".age-of-pet").textContent = data.data.age || 'N/A';
+                      document.querySelector(".breed-of-pet").textContent = data.data.category || 'N/A';
+                      document.querySelector(".sex-of-pet").textContent = data.data.sex || 'N/A';
+                      document.querySelector("#bioText").textContent = data.data.description || 'No description available';
+                      document.querySelector(".animal").textContent = data.data.category || 'Pet';
+                  } else {
+                      console.error("Error status in response:", data.message);
+                      showNoPetDataMessage();
+                  }
+              })
+              .catch(error => {
+                  console.error("Error fetching pet data:", error);
+                  showErrorMessage();
+              });
+      }).catch(error => {
+          console.error("Auth check failed:", error);
+      });
+  });
+
+  function showNoPetDataMessage() {
+      const defaultMessage = "No pet information available";
+      document.querySelector(".name-of-pet").textContent = "Add Your Pet";
+      document.querySelector(".address").innerHTML = "<b>Address :</b> <br>Not set";
+      document.querySelector(".age-of-pet").textContent = "-";
+      document.querySelector(".breed-of-pet").textContent = "-";
+      document.querySelector(".sex-of-pet").textContent = "-";
+      document.querySelector("#bioText").textContent = "Add a description for your pet";
+      document.querySelector(".animal").textContent = "Pet";
+  }
+
+  function showErrorMessage() {
+      console.error("Unable to load pet data");
+  }
+  </script>
+
+  
+    </body>
+
+
+</html>
